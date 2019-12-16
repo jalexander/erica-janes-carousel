@@ -1,0 +1,169 @@
+* {
+    box-sizing: border-box;
+}
+
+@keyframes rotate-carousel {
+    from {
+        transform: rotateY(0deg);
+    }
+
+    to {
+        transform: rotateY(-360deg);
+    }
+}
+
+@keyframes move-horse {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(35px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+@keyframes move-horse-odd {
+    0% {
+        transform: translateY(35px);
+    }
+
+    50% {
+        transform: translateY(0px);
+    }
+
+    100% {
+        transform: translateY(35px);
+    }
+}
+
+@keyframes fade-in {
+  0% {
+      opacity: 0;
+  }
+
+  100% {
+      opacity: 1;
+  }
+}
+
+html {
+    overflow: hidden;
+
+    width: 100%;
+    min-width: 320px;
+    min-height: 100%;
+
+    background: linear-gradient(to bottom, #f8e9c4, #daedc9, #bfeedb, #b0ebef, #b7e4fd) no-repeat center center / cover;
+}
+
+body {
+    font-family: sans-serif;
+
+    width: 100%;
+    min-width: 320px;
+    min-height: 100%;
+
+    text-align: center;
+}
+
+.stage {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+
+    width: 200px;
+    height: 150px;
+    margin: 0 auto 0;
+
+    transform: translate(-50%, -102%);
+
+    animation-name: fade-in;
+    animation-duration: 2s;
+    animation-timing-function: ease-out;
+
+    perspective: 2000px;
+}
+
+.carousel {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    animation-name: rotate-carousel;
+    animation-duration: 20s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+
+    transform-style: preserve-3d;
+}
+
+.carousel__item {
+    position: absolute;
+    top: 234px;
+
+    width: 200px;
+    height: 150px;
+
+    color: #fff;
+    cursor: pointer;
+}
+
+.carousel__item::before {
+    position: absolute;
+    top: 0;
+    left: 50%;
+
+    width: 3px;
+    height: 100%;
+
+    content: '';
+    transform: translateX(-50%);
+
+    background: #fff;
+}
+
+.carousel__item svg {
+    width: 132px;
+    height: 115px;
+
+    animation-name: move-horse;
+    animation-duration: 4s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+
+    fill: #fff;
+}
+
+.carousel__item:nth-of-type(2n) svg {
+    animation-name: move-horse-odd;
+}
+
+.carousel-controls {
+    position: relative;
+    z-index: 2;
+    top: 500px;
+
+    text-align: center;
+}
+
+.svg-attribution {
+    font-family: monospace;
+    font-size: 11px;
+
+    position: absolute;
+    right: 0;
+    bottom: 0;
+
+    padding: 10px;
+
+    color: #fff;
+}
+
+.svg-attribution a {
+    color: #fff;
+}
