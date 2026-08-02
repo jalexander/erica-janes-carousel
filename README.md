@@ -6,15 +6,20 @@ https://moontide.io
 
 #### Install dependencies
 ```
-yarn
+npm install
 ```
 
 #### Run development
 ```
-yarn start
+npm run dev
 ```
 
 #### Build for production
 ```
-yarn build
+npm run build
+```
+
+#### Preview the production build
+```
+npm run preview
 ```
