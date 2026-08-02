@@ -1,9 +1,9 @@
 import { qs, $on } from '../helpers';
 
-import horse1 from '../images/horse1.svg';
-import horse2 from '../images/horse2.svg';
-import horse3 from '../images/horse3.svg';
-import horse4 from '../images/horse4.svg';
+import horse1 from '../images/horse1.svg?raw';
+import horse2 from '../images/horse2.svg?raw';
+import horse3 from '../images/horse3.svg?raw';
+import horse4 from '../images/horse4.svg?raw';
 
 const svgList = [horse1, horse2, horse3, horse4];
 
