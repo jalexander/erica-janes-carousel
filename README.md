@@ -2,7 +2,7 @@
 
 A carousel for my wife
 
-https://moontide.io
+https://carousel.jima.dev/
 
 #### Install dependencies
 ```
