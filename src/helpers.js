@@ -3,7 +3,7 @@
  *
  */
 export function qs(selector, scope) {
-	return (scope || document).querySelector(selector);
+  return (scope || document).querySelector(selector);
 }
 
 /**
@@ -11,5 +11,5 @@ export function qs(selector, scope) {
  *
  */
 export function $on(target, type, callback, capture) {
-	target.addEventListener(type, callback, !!capture);
+  target.addEventListener(type, callback, !!capture);
 }
