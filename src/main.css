@@ -26,7 +26,7 @@
     }
 }
 
-@keyframes move-horse-odd {
+@keyframes move-horse-alt {
     0% {
         transform: translateY(35px);
     }
@@ -41,13 +41,13 @@
 }
 
 @keyframes fade-in {
-  0% {
-      opacity: 0;
-  }
+    0% {
+        opacity: 0;
+    }
 
-  100% {
-      opacity: 1;
-  }
+    100% {
+        opacity: 1;
+    }
 }
 
 html {
@@ -57,7 +57,8 @@ html {
     min-width: 320px;
     min-height: 100%;
 
-    background: linear-gradient(to bottom, #f8e9c4, #daedc9, #bfeedb, #b0ebef, #b7e4fd) no-repeat center center / cover;
+    background: linear-gradient(to bottom, #f8e9c4, #daedc9, #bfeedb, #b0ebef, #b7e4fd) no-repeat
+        center center / cover;
 }
 
 body {
@@ -70,6 +71,7 @@ body {
     text-align: center;
 }
 
+/* Invisible perspective origin; top/translate park the ring, tuned by eye. */
 .stage {
     position: absolute;
     top: 25%;
@@ -104,6 +106,7 @@ body {
 
 .carousel__item {
     position: absolute;
+    /* Nudge to move every horse up or down together. */
     top: 234px;
 
     width: 200px;
@@ -140,15 +143,65 @@ body {
 }
 
 .carousel__item:nth-of-type(2n) svg {
-    animation-name: move-horse-odd;
+    animation-name: move-horse-alt;
 }
 
 .carousel-controls {
-    position: relative;
+    position: absolute;
     z-index: 2;
-    top: 500px;
+    bottom: 0;
+    left: 0;
 
-    text-align: center;
+    padding: 10px;
+}
+
+/* The disc lives in the SVG, not here, so the glyph can be knocked out of it. */
+.carousel-controls__toggle {
+    display: block;
+
+    width: 40px;
+    height: 40px;
+    padding: 0;
+
+    cursor: pointer;
+
+    border: 0;
+    border-radius: 50%;
+    background: none;
+}
+
+.carousel-controls__icon {
+    display: block;
+
+    width: 40px;
+    height: 40px;
+}
+
+.carousel-controls__disc {
+    fill: rgba(255, 255, 255, 0.9);
+
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+.carousel-controls__toggle:hover .carousel-controls__disc {
+    fill: #fff;
+}
+
+.carousel-controls__play {
+    display: none;
+}
+
+.carousel-controls__toggle.is-paused .carousel-controls__pause {
+    display: none;
+}
+
+.carousel-controls__toggle.is-paused .carousel-controls__play {
+    display: inline;
+}
+
+.carousel-controls__toggle:focus-visible {
+    outline: 2px solid #3d4a4a;
+    outline-offset: 2px;
 }
 
 .svg-attribution {
@@ -166,4 +219,16 @@ body {
 
 .svg-attribution a {
     color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .stage,
+    .carousel,
+    .carousel__item svg {
+        animation: none;
+    }
+
+    .carousel-controls {
+        display: none;
+    }
 }
