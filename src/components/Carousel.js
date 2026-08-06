@@ -5,18 +5,18 @@ import horse2 from '../images/horse2.svg?raw';
 import horse3 from '../images/horse3.svg?raw';
 import horse4 from '../images/horse4.svg?raw';
 
-const svgSources = [horse1, horse2, horse3, horse4];
-
 // Parsed as XML, not via innerHTML: the HTML parser turns the files' `<?xml ?>`
 // prolog into a comment node and buries the <svg> among its siblings.
-const svgTemplates = svgSources.map(source => {
-  const svg = new DOMParser().parseFromString(source, 'image/svg+xml').documentElement;
+function parseSvgTemplates(sources) {
+  return sources.map(source => {
+    const svg = new DOMParser().parseFromString(source, 'image/svg+xml').documentElement;
 
-  svg.setAttribute('aria-hidden', 'true');
-  svg.setAttribute('focusable', 'false');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.setAttribute('focusable', 'false');
 
-  return svg;
-});
+    return svg;
+  });
+}
 
 // The radius divides by tan(PI / count), which degenerates below 3.
 const minItems = 3;
@@ -28,28 +28,36 @@ class Carousel {
     }
 
     this.size = size;
-    this.carousel = qs('.carousel');
-    this.toggle = qs('.carousel-controls__toggle');
-    this.horses = [];
+    this._carousel = qs('.carousel');
+    this._toggle = qs('.carousel-controls__toggle');
+    this.svgElements = [];
     this.isPlaying = true;
+
+    const svgSources = [horse1, horse2, horse3, horse4];
+    this._svgTemplates = parseSvgTemplates(svgSources);
 
     this.addItems();
     this.addListeners();
   }
 
   addListeners() {
-    $on(this.carousel, 'click', () => this.togglePlayState());
-    $on(this.toggle, 'click', () => this.togglePlayState());
+    $on(this._carousel, 'click', () => this.togglePlayState());
+    $on(this._toggle, 'click', () => this.togglePlayState());
+  }
+
+  dispose() {
+    this._carousel.removeEventListener('click', () => this.togglePlayState());
+    this._toggle.removeEventListener('click', () => this.togglePlayState());
   }
 
   togglePlayState() {
     this.isPlaying = !this.isPlaying;
 
-    this.setPlayState(this.carousel, this.isPlaying);
-    this.horses.forEach(horse => this.setPlayState(horse, this.isPlaying));
+    this.setPlayState(this._carousel, this.isPlaying);
+    this.svgElements.forEach(svg => this.setPlayState(svg, this.isPlaying));
 
-    this.toggle.classList.toggle('is-paused', !this.isPlaying);
-    this.toggle.setAttribute('aria-label', this.isPlaying ? 'Pause' : 'Play');
+    this._toggle.classList.toggle('is-paused', !this.isPlaying);
+    this._toggle.setAttribute('aria-label', this.isPlaying ? 'Pause' : 'Play');
   }
 
   setPlayState(el, isPlaying) {
@@ -57,24 +65,25 @@ class Carousel {
   }
 
   getRadius(itemWidth, itemCount) {
+    if (itemCount <= 1 || itemWidth <= 0) return 0;
     return Math.round(itemWidth / 2 / Math.tan(Math.PI / itemCount));
   }
 
   addItems() {
-    const radius = this.getRadius(this.carousel.offsetWidth, this.size);
+    const radius = this.getRadius(this._carousel.offsetWidth, this.size);
     const theta = 360 / this.size;
 
     for (let i = 0; i < this.size; i++) {
       const horse = document.createElement('div');
-      const svg = svgTemplates[i % svgTemplates.length].cloneNode(true);
+      const svg = this._svgTemplates[i % this._svgTemplates.length].cloneNode(true);
 
       horse.classList.add('carousel__item');
       horse.style.transform = `rotateY(${theta * i}deg) translateZ(${radius}px)`;
       horse.appendChild(svg);
 
       // The <svg> carries the bobbing animation, so that is what pausing needs.
-      this.horses.push(svg);
-      this.carousel.appendChild(horse);
+      this.svgElements.push(svg);
+      this._carousel.appendChild(horse);
     }
   }
 }
